@@ -1,0 +1,192 @@
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>HuntingCalc</title>
+    <link  href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.4.min.js"></script>
+    <script>window.jQuery || document.write('<script src="/js/jquery-1.12.4.min.js">\x3C/script>')</script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+    <style>
+.dropbtn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+
+.dropbtn:hover, .dropbtn:focus {
+    background-color: #3e8e41;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    overflow: auto;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+    /*padding: 12px 16px;*/
+    padding-left:10px;
+    padding-right:10px;
+    padding-top:10px;
+    padding-bottom:10px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown a:hover {background-color: #f1f1f1}
+
+.show {display:block;}
+</style>
+    
+   
+    
+</head>
+
+
+<body>
+
+    
+
+    <h2>Departure Calculator</h2>
+    <h4>This  form determines that time you need to leave to be able to make it to your favorite hunting spot and be fully ready to hunt. Please enter values for all fields to make your results more accurate. The time is based the 24 hour format so you will not see AM or PM.</h4>
+
+
+    <script>
+
+        function dropdownFunction() {
+            document.getElementById("myDropdown").classList.toggle("show");
+        }
+
+        // Close the dropdown if the user clicks outside of it
+        window.onclick = function (event) {
+            if (!event.target.matches('.dropbtn')) {
+
+                var dropdowns = document.getElementsByClassName("dropdown-content");
+                var i;
+                for (i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
+            }
+        }
+        
+
+        function myFunction() {
+
+            function converToMinutes(s) {
+                var c = s.split(':');
+                return parseInt(c[0]) * 60 + parseInt(c[1]);
+
+            }
+
+            function parseTime(s) {
+                var seconds = parseInt(s) % 60;
+                return Math.floor(parseInt(s) / 60) + ":" + ((seconds < 10) ? "0" + seconds : seconds);
+            }
+            //This takes sunrise input, throws it into converToMinutes, it gets parsed to an int, this value is then set for sunriseTime variable
+            var sunriseTime = converToMinutes(document.getElementById("stime").value);
+            console.log(sunriseTime);
+            //Drive
+            var drive = document.getElementById("dtime").value;
+            var driveTime = parseInt(drive);
+            console.log(driveTime);
+            //Setup
+            var setup = document.getElementById("sptime").value;
+            var setupTime = parseInt(setup);
+            console.log(setupTime);
+            //Legal
+            var legal = 30;
+            var legalTime = parseInt(legal);
+            console.log(legalTime);
+            //Walk wktime
+            var walk = document.getElementById("wktime").value;
+            var walkTime = parseInt(walk);
+            console.log(walkTime);
+            //Wait watime
+            var wait = document.getElementById("watime").value;
+            var waitTime = parseInt(wait);
+            console.log(waitTime);
+            //Result
+            var merge = sunriseTime - (legalTime + driveTime + setupTime + walkTime + waitTime);
+            console.log(merge);
+            var converted = parseTime(merge);
+            console.log(converted);
+            document.getElementById('finishtime').innerHTML = converted;
+
+
+
+        }
+    </script>
+
+    <!-- Any HTML here will be styled with Bootstrap CSS -->
+    <div class="bootstrap-iso">
+        <form>
+
+            <div class="form-group">
+                <label for="sunrise">Enter time of sunrise on the day you plan to hunt: </label>
+                <input type="text" id="stime" class="form-control" placeholder="Please enter time in 24 hour format (ie. 16:00 = 4:00PM)" />
+            </div>
+
+            <div class="form-group">
+                <label for="drive">Enter the number of minutes it will take to drive to your destination:</label>
+                <input type="text" id="dtime" class="form-control" placeholder="Please enter value in minutes" />
+            </div>
+
+            <div class="form-group">
+                <label for="walk">Enter the number of minutes it should take to walk to your spot (give yourself time for unpacking gear too...)</label>
+                <input type="text" id="wktime" class="form-control" placeholder="Please enter value in minutes" />
+            </div>
+
+            <div class="form-group">
+                <label for="setup">Enter the number of minutes it takes to set up <em>all</em> the gear:</label>
+                <input type="text" id="sptime" class="form-control" placeholder="Please enter value in minutes" />
+            </div>
+
+            <div class="form-group">
+                <label for="wait">Enter number of leftover minutes to be ready before you can legally shoot</label>
+                <input type="text" id="watime" class="form-control" placeholder="Please enter value in minutes" />
+            </div>
+
+            <button type="button" id="modal" class="btn btn-success" data-toggle="modal" data-target="#exampleModal" onclick="myFunction()" usessubmitbehavior="true">Calculate</button>
+            @*<button type="button" class="btn btn-success" onclick="myFunction()">Calculate</button>*@
+
+            <br /><br /><p>You should leave at : (Please note that legal shooting time, when you can start hunting, is 30 minutes before sunrise. The 30 minutes is included in the calculation.)</p>
+            <p id="finishtime">
+        </form>
+
+    </div>
+
+    <script src="https://npmcdn.com/tether@1.2.4/dist/js/tether.min.js"></script>
+    <script src="https://npmcdn.com/bootstrap@4.0.0-alpha.5/dist/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+
+
+</body>
+</html>
